@@ -10,7 +10,7 @@
 </head>
 <body>
     <header class="header">
-        <div class="mycontainer">
+        <div class="header--container">
             LOGO
         </div>
     </header>
@@ -23,15 +23,12 @@
                     </h1>
                     <div class="list__item--desc">
                         <p class="list__item--paragrap">
-                            
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. 
                             <span>...</span>
                             <button>See more</button>
                             <span class="list__item--detail">
                             </span>
                         </p>
-                        <!-- <span class="list__item--paragrap"> Dolor labore natus enim mollitia omnis ducimus ipsa eum corrupti,</span>
-                        <span class="list__item--paragrap">nesciunt molestias itaque assumenda. Incidunt amet, </span>
-                        <span class="list__item--paragrap">doloribus hic fugiat dolor cupiditate ipsa.</span> -->
                     </div>
                 </div>
                 <figure class="list__item--cover">
@@ -44,7 +41,7 @@
                     <button class="list__item--btn">
                         Commnet
                     </button>
-                    <button class="list__item--btn">
+                    <button class="list__item--btn share-btn">
                         Share
                     </button>
                 </div>
@@ -84,11 +81,21 @@
     </section>
 
 
+    <section class="popup">
+        <div class="popup--content border">
+dsds
+        </div>
+    </section>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        $('.share-btn').on('click', function(){
+            $('.popup').toggle('active')
+        })
 
-        var text = ['Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit.'];
+        $('.popup').on('click', function(){
+            $('.popup').toggle('active')
+        })
     </script>
 </body>
 </html>

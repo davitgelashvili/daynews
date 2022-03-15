@@ -1,4 +1,6 @@
 .list {
+    margin: 100px 0;
+
     &__item {
         background-color: #fff;
         margin-bottom: 30px;
@@ -33,6 +35,11 @@
             width: 100%;
             max-height: 500px;
             overflow: hidden;
+
+            @media (max-width: 700px) {
+                margin-left: -15px;
+                width: calc(100% + 30px);
+            }
         }
 
         &--img {
