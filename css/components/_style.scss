@@ -1,0 +1,42 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'regular';
+}
+
+@font-face {
+    font-family: 'regular';
+    src: url(../fonts/Sk-Modernist-Regular.otf);
+}
+
+body {
+    background-color: #FAFAFA;
+}
+
+.mycontainer {
+    max-width: 680px;
+    width: 100%;
+    margin: auto;
+}
+
+
+$mainColor: #040921;
+
+@function color($color, $opacity) {
+    @return rgba($color, $opacity);
+}
+
+@function gradient($opacity: 1, $color1: #9D50FF, $color2: #9D50FF) {
+    @return linear-gradient(to right, color($color1, $opacity) 11.55%, color($color2, $opacity) 104.8%);
+}
+
+.regular {
+    font-family: 'regular';
+}
+
+.border {
+    border: 1px solid color($mainColor, .08);
+    box-sizing: border-box;
+    border-radius: 8px;
+}
