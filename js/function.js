@@ -59,13 +59,13 @@ $(document).ready(function(){
         if(data.length > 1){
             for (let i = 0; i < data.length; i++) {
                 return `
-                    <div><img src="../img/${data[0]}" class="list__item--img" alt="data"></div>
+                    <div><img src="./../img/${data[0]}" class="list__item--img" alt="data"></div>
                     <div><img src="../img/${data[1]}" class="list__item--img" alt="data"></div>
                 `;
             }
         }else {
             return `
-                <div><img src="../img/${data}" class="list__item--img" alt="data"></div>
+                <div><img src="./../img/${data}" class="list__item--img" alt="data"></div>
             `;  
         }
     }
