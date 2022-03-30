@@ -1,74 +1,86 @@
 $(document).ready(function(){
-    fetch('./date.json')
+    let array = [];
+    let cat = []
+    // https://graphql.datocms.com/
+    // https://graphql.datocms.com/environments/{ENVIRONMENT-NAME}
+    const token = '69efc8d8b09bf3c143933e19014082';
+    fetch('https://graphql.datocms.com/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+                query: `{ 
+                    allNewsPosts(first: 10, skip: 0) { id, title, description, covers {id, filename, url}, categories },
+                }`
+            }),
+    })
     .then(res => res.json())
-    .then(res => data(res) )
+    .then((res) => {
+        res.data.allNewsPosts.forEach( (item)=> {
+            array.push(item)
+            data(item)
+        })
+    })
+    .catch((error) => {
+        console.log(error);
+    })
     .finally(()=> {
         data;
         projectSlider();
         itemLoading();
-    })
+    });
 
-    function data(items){
-        items.map( (item)=>{
-            $('.list').append(`
-                <div class="list__item border">
-                    <div class="list__item--head">
-                        <h1 class="list__item--title">
-                            ${item.title}
-                        </h1>
-                        ${item.desc ? (`
-                            <div class="list__item--desc">
-                                <p class="list__item--paragrap">
-                                    ${item?.desc} 
-                                    <span>...</span>
-                                    <button>See more</button>
-                                    <span class="list__item--detail">
-                                    </span>
-                                </p>
-                            </div>
-                        `) : ''}
+    function data(item){
+        console.log(item)
+        $('.list').append(`
+            <div class="list__item border">
+                <div class="list__item--head">
+                    <h1 class="list__item--title">
+                        ${item.title}
+                    </h1>
+                    ${item.description ? (`
+                        <div class="list__item--desc">
+                            <p class="list__item--paragrap">
+                                ${item?.description} 
+                                <span>...</span>
+                                <button>See more</button>
+                                <span class="list__item--detail">
+                                </span>
+                            </p>
+                        </div>
+                    `) : ''}
+                </div>
+                <figure class="list__item--cover">
+                    <div class="projects__slider owl-carousel owl-theme owl-loaded">
+                        ${item.covers.map( i=>`<div><img src="${i.url}" class="list__item--img" alt="data"></div>`)}
                     </div>
-                    <figure class="list__item--cover">
-                        <div class="projects__slider owl-carousel owl-theme owl-loaded">
-                            ${imgObject(item.img)}
-                        </div>
-                        <div class="d-flex justify-content-center">
-                            <div class="projects__slider--dots"></div>
-                        </div>
-                        <div class="d-flex justify-content-center">
-                            <div class="projects__slider--navs"></div>
-                        </div>
-                    </figure>
-                    <div class="list__item--footer d-flex justify-content-between">
-                        <button class="list__item--btn">
-                            Like (${item.like})
-                        </button>
-                        <button class="list__item--btn">
-                            Commnet
-                        </button>
-                        <button class="list__item--btn share-btn">
-                            Share
-                        </button>
+                    <div class="d-flex justify-content-center">
+                        <div class="projects__slider--dots"></div>
                     </div>
-                </div>    
-            `)
-        } )
+                    <div class="d-flex justify-content-center">
+                        <div class="projects__slider--navs"></div>
+                    </div>
+                </figure>
+                <ul>
+                    ${item.categories.map( i=>`<li>${i}</li>`)}
+                </ul>
+                <div class="list__item--footer d-flex justify-content-between">
+                    <button class="list__item--btn">
+                        Like (${item.like})
+                    </button>
+                    <button class="list__item--btn">
+                        Commnet
+                    </button>
+                    <button class="list__item--btn share-btn">
+                        Share
+                    </button>
+                </div>
+            </div>    
+        `)
     }   
-
-    function imgObject(data){   
-        if(data.length > 1){
-            for (let i = 0; i < data.length; i++) {
-                return `
-                    <div><img src="./img/${data[0]}" class="list__item--img" alt="data"></div>
-                    <div><img src="./img/${data[1]}" class="list__item--img" alt="data"></div>
-                `;
-            }
-        }else {
-            return `
-                <div><img src="./img/${data}" class="list__item--img" alt="data"></div>
-            `;  
-        }
-    }
 
     function itemLoading(){
         $(".list .list__item").slice(10).hide();
@@ -111,4 +123,28 @@ $(document).ready(function(){
         // })
 
     }
+
+
+        // filter func
+        let filterDomains = () =>{
+            // get checked
+            var zones = $("[name='zone']:checkbox:checked").map(function(){
+                return $(this).data('zone');
+            }).get();  
+
+            let filtered =  array.filter( item => (!zones.length || zones.some(zone => zone == item.categories) ) )
+    
+            // clear html element
+            $('.list').html('');
+
+            console.log(filtered)
+            filtered.map ( (item, key) => data(item));
+        }
+    
+        // input change
+        $('.filter').on('change', 'input', function(event) {
+            filterDomains();
+            projectSlider();
+            itemLoading();
+        })
 })

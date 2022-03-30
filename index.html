@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" manifest="sample.caching">
 <head>
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,8 +13,14 @@
 </head>
 <body>
     <header class="header">
-        <div class="header--container">
-            LOGO
+        <div class="header--container d-flex justify-content-between">
+            <div>
+                LOGO
+            </div>
+            <div>
+                <div class="filter d-flex">
+                </div>
+            </div>
         </div>
     </header>
     <section class="mycontainer">
@@ -21,15 +28,30 @@
         </ul>
     </section>
 
-
-    <section class="popup">
-        <div class="popup--content border">
-dsds
-        </div>
-    </section>
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="./js/owl.carousel.min.js"></script>
     <script src="./js/function.js"></script>
+    <script>
+        const allCategor = [
+            {
+                name: "ტექნოლოგიები",
+                value: 'ტექნოლოგიები',
+                id: "1231231"
+            },
+            {
+                name: "მეცინიერული",
+                value: 'მეცინიერული',
+                id: "1654541"
+            }
+        ]
+        allCategor.map( (item)=> {
+            $('.filter').append(`
+                <label class="d-flex align-items-center">
+                    <input type="checkbox" id="${item.name}" name="zone" data-zone="${item.name}" value="${item.name}">
+                    <p>${item.value}</p>
+                </label>
+            `)
+        })
+    </script>
 </body>
 </html>
