@@ -62,7 +62,6 @@ body {
 
 .list__item--head {
   padding: 24px;
-  border-bottom: 1px solid rgba(4, 9, 33, 0.16);
 }
 
 .list__item--title {
@@ -73,13 +72,15 @@ body {
 }
 
 .list__item--desc {
-  height: 44px;
   overflow: hidden;
 }
 
-.list__item--paragrap {
-  width: auto;
-  float: left;
+.list__item--desc * {
+  margin: revert;
+  padding: revert;
+}
+
+.list__item p, .list__item--paragrap {
   color: #040921;
   font-size: 16px;
   line-height: 22px;
@@ -93,6 +94,7 @@ body {
   padding-bottom: 100%;
   position: relative;
   overflow: hidden;
+  border-top: 1px solid rgba(4, 9, 33, 0.16);
 }
 
 @media (max-width: 700px) {

@@ -1,8 +1,24 @@
 $(document).ready(function(){
+    function random_elems(arr, count) {
+        let len = arr.length;
+        let lookup = {};
+        let tmp = [];
+
+        if (count > len) count = len;
+
+        for (let i = 0; i < count; i++) {
+          let index;
+          do {
+            index = ~~(Math.random() * len);
+          } while (index in lookup);
+          lookup[index] = null;
+          tmp.push(arr[index]);
+        }
+
+        return tmp;
+    }
+
     let array = [];
-    let cat = []
-    // https://graphql.datocms.com/
-    // https://graphql.datocms.com/environments/{ENVIRONMENT-NAME}
     const token = '69efc8d8b09bf3c143933e19014082';
     fetch('https://graphql.datocms.com/', {
             method: 'POST',
@@ -13,13 +29,16 @@ $(document).ready(function(){
             },
             body: JSON.stringify({
                 query: `{ 
-                    allNewsPosts(first: 10, skip: 0) { id, title, description, covers {id, filename, url}, categories },
+                    allNewsPosts(first: 10, skip: 0) { id, title, description, covers {id, filename, url}, video {url}, categories },
                 }`
             }),
     })
     .then(res => res.json())
     .then((res) => {
-        res.data.allNewsPosts.forEach( (item)=> {
+        let obj = res.data.allNewsPosts;
+        var randomData = random_elems(obj, obj.length);
+       
+        randomData.forEach( (item)=> {
             array.push(item)
             data(item)
         })
@@ -34,39 +53,40 @@ $(document).ready(function(){
     });
 
     function data(item){
-        console.log(item)
+        // console.log(item)
         $('.list').append(`
             <div class="list__item border">
                 <div class="list__item--head">
                     <h1 class="list__item--title">
-                        ${item.title}
+                        ${item?.title}
                     </h1>
                     ${item.description ? (`
                         <div class="list__item--desc">
-                            <p class="list__item--paragrap">
-                                ${item?.description} 
-                                <span>...</span>
-                                <button>See more</button>
-                                <span class="list__item--detail">
-                                </span>
-                            </p>
+                            ${item?.description} 
                         </div>
                     `) : ''}
                 </div>
-                <figure class="list__item--cover">
-                    <div class="projects__slider owl-carousel owl-theme owl-loaded">
-                        ${item.covers.map( i=>`<div><img src="${i.url}" class="list__item--img" alt="data"></div>`)}
-                    </div>
-                    <div class="d-flex justify-content-center">
-                        <div class="projects__slider--dots"></div>
-                    </div>
-                    <div class="d-flex justify-content-center">
-                        <div class="projects__slider--navs"></div>
-                    </div>
-                </figure>
-                <ul>
-                    ${item.categories.map( i=>`<li>${i}</li>`)}
-                </ul>
+                ${item.covers.length ? `
+                    <figure class="list__item--cover">
+                            <div class="projects__slider owl-carousel owl-theme owl-loaded">
+                                ${item.covers && item.covers.map( i=>`<div><img src="${i.url}" class="list__item--img" alt="data"></div>`)}
+                            </div>
+                        <div class="d-flex justify-content-center">
+                            <div class="projects__slider--dots"></div>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <div class="projects__slider--navs"></div>
+                        </div>
+                    </figure>
+                ` : ''}
+                ${item.video ? `
+                    <iframe width="100%" height="315" src="${item.video.url}" title="${item.video.title}" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                ` : ''}
+                ${item.categories ? `
+                    <ul>
+                        ${item.categories && item.categories.map( i=>`<li>${i}</li>`)}
+                    </ul>
+                ` : ''}
                 <div class="list__item--footer d-flex justify-content-between">
                     <button class="list__item--btn">
                         Like (${item.like})
@@ -132,13 +152,14 @@ $(document).ready(function(){
                 return $(this).data('zone');
             }).get();  
 
-            let filtered =  array.filter( item => (!zones.length || zones.some(zone => zone == item.categories) ) )
+
+            let filtered =  array.filter( item => (!zones.length || zones.some(zone => zone == item.categories.filter( (i)=>i ) ) ) )
     
             // clear html element
             $('.list').html('');
 
-            console.log(filtered)
-            filtered.map ( (item, key) => data(item));
+            var randomData = random_elems(filtered, filtered.length);
+            randomData.map ( (item, key) => data(item));
         }
     
         // input change
