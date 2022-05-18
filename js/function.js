@@ -29,7 +29,7 @@ $(document).ready(function(){
             },
             body: JSON.stringify({
                 query: `{ 
-                    allNewsPosts(first: 10, skip: 0) { id, title, description, covers {id, filename, url}, video {url}, categories },
+                    allNewsPosts(first: 10, skip: 0) { id, title, description, covers {id, filename, url}, video {url}, categories, },
                 }`
             }),
     })
